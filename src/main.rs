@@ -6,8 +6,8 @@ use itertools::{Itertools, iproduct};
 use num::rational::Ratio;
 use operator::Operator;
 
-mod operator;
 mod expr;
+mod operator;
 
 fn main() {
     let stdin = stdin();
@@ -26,7 +26,7 @@ fn main() {
 
 fn solve(q: [i32; 4]) {
     // 逆ポーランド記法で有効となる長さ7の式のテンプレート
-    const TEMPLATE: [[expr::ItemKind; 7]; 4] = [
+    const TEMPLATE: [[expr::ItemKind; 7]; 5] = [
         [
             expr::ItemKind::Number,
             expr::ItemKind::Number,
@@ -34,6 +34,15 @@ fn solve(q: [i32; 4]) {
             expr::ItemKind::Number,
             expr::ItemKind::Operator,
             expr::ItemKind::Number,
+            expr::ItemKind::Operator,
+        ],
+        [
+            expr::ItemKind::Number,
+            expr::ItemKind::Number,
+            expr::ItemKind::Operator,
+            expr::ItemKind::Number,
+            expr::ItemKind::Number,
+            expr::ItemKind::Operator,
             expr::ItemKind::Operator,
         ],
         [
