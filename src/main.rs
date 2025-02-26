@@ -28,6 +28,7 @@ fn solve(q: [i32; 4]) {
     // 逆ポーランド記法で有効となる長さ7の式のテンプレート
     const TEMPLATE: [[expr::ItemKind; 7]; 5] = [
         [
+            // infix: (((a <op1> b) <op2> c) <op3> d)
             expr::ItemKind::Number,
             expr::ItemKind::Number,
             expr::ItemKind::Operator,
@@ -37,6 +38,7 @@ fn solve(q: [i32; 4]) {
             expr::ItemKind::Operator,
         ],
         [
+            // infix: ((a <op1> b) <op3> (c <op2> d))
             expr::ItemKind::Number,
             expr::ItemKind::Number,
             expr::ItemKind::Operator,
@@ -46,6 +48,7 @@ fn solve(q: [i32; 4]) {
             expr::ItemKind::Operator,
         ],
         [
+            // infix: ((a <op2> (b <op1> c)) <op3> d)
             expr::ItemKind::Number,
             expr::ItemKind::Number,
             expr::ItemKind::Number,
@@ -55,6 +58,7 @@ fn solve(q: [i32; 4]) {
             expr::ItemKind::Operator,
         ],
         [
+            // infix: (a <op3> ((b <op1> c) <op2> d))
             expr::ItemKind::Number,
             expr::ItemKind::Number,
             expr::ItemKind::Number,
@@ -64,6 +68,7 @@ fn solve(q: [i32; 4]) {
             expr::ItemKind::Operator,
         ],
         [
+            // infix: (a <op2> (b <op3> (c <op1> d)))
             expr::ItemKind::Number,
             expr::ItemKind::Number,
             expr::ItemKind::Number,
@@ -115,6 +120,6 @@ fn solve(q: [i32; 4]) {
     .unique()
     // 出力
     .for_each(|expr| {
-        println!("{} = 10", expr::normalize(&expr));
+        println!("{} = 10", expr::infix(&expr));
     });
 }

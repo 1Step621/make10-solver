@@ -55,7 +55,7 @@ pub fn eval(stack: &[Item]) -> Result<Ratio<i32>> {
 }
 
 // 式を逆ポーランドから通常の形式に変換する
-pub fn normalize(stack: &[Item]) -> String {
+pub fn infix(stack: &[Item]) -> String {
     let mut mem = Vec::new();
     for item in stack {
         match item {
