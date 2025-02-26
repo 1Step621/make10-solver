@@ -90,7 +90,7 @@ fn solve(q: [i32; 4]) {
             Operator::VALUES.iter(),
             Operator::VALUES.iter()
         )
-        .map(|(o1, o2, o3)| vec![
+        .map(|(o1, o2, o3)| [
             expr::Item::Operator(*o1),
             expr::Item::Operator(*o2),
             expr::Item::Operator(*o3),
