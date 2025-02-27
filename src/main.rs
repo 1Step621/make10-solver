@@ -101,12 +101,15 @@ fn solve(q: [i32; 4]) {
         template
             .iter()
             .scan((0, 0), |(i, j), k| {
-                if *k == expr::ItemKind::Operator {
-                    *i += 1;
-                    Some(op[*i - 1].clone())
-                } else {
-                    *j += 1;
-                    Some(num[*j - 1].clone())
+                match k {
+                    expr::ItemKind::Number => {
+                        *i += 1;
+                        Some(num[*i - 1].clone())
+                    }
+                    expr::ItemKind::Operator => {
+                        *j += 1;
+                        Some(op[*j - 1].clone())
+                    }
                 }
             })
             .collect::<Vec<_>>()
