@@ -9,10 +9,14 @@ use operator::Operator;
 mod expr;
 mod operator;
 
+const NUMBERS: usize = 4;
+const OPERATORS: usize = NUMBERS - 1;
+const LENGTH: usize = NUMBERS + OPERATORS;
+
 fn main() {
     let stdin = stdin();
 
-    println!("Enter 4 numbers separated by spaces:");
+    println!("Enter {NUMBERS} numbers separated by spaces:");
     let mut buf = String::new();
     stdin.read_line(&mut buf).unwrap();
     let q = buf
@@ -28,9 +32,9 @@ fn main() {
 }
 
 #[must_use]
-fn solve(q: [i32; 4]) -> Vec<Vec<expr::Item>> {
+fn solve(q: [i32; NUMBERS]) -> Vec<[expr::Item; LENGTH]> {
     // 逆ポーランド記法で有効となる長さ7の式のテンプレート
-    const TEMPLATE: [[expr::ItemKind; 7]; 5] = [
+    const TEMPLATE: [[expr::ItemKind; LENGTH]; 5] = [
         [
             // infix: (((a <op1> b) <op2> c) <op3> d)
             expr::ItemKind::Number,
@@ -88,7 +92,7 @@ fn solve(q: [i32; 4]) -> Vec<Vec<expr::Item>> {
         TEMPLATE.iter(),
         q.iter()
             .map(|&n| expr::Item::Number(Ratio::new(n, 1)))
-            .permutations(4),
+            .permutations(NUMBERS),
         iproduct!(
             Operator::VALUES.iter(),
             Operator::VALUES.iter(),
@@ -116,7 +120,8 @@ fn solve(q: [i32; 4]) -> Vec<Vec<expr::Item>> {
                     }
                 }
             })
-            .collect::<Vec<_>>()
+            .collect_array::<LENGTH>()
+            .unwrap()
     })
     // 全探索して10になる式を抽出
     .filter(|expr| {
