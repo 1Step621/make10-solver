@@ -36,36 +36,36 @@ impl Display for Item {
 }
 
 // 式を評価する
-pub fn eval(stack: &[Item]) -> Result<Ratio<i32>> {
-    let mut mem = Vec::new();
-    for item in stack {
+pub fn eval(expr: &[Item]) -> Result<Ratio<i32>> {
+    let mut stack = Vec::new();
+    for item in expr {
         match item {
-            Item::Number(n) => mem.push(Item::Number(*n)),
+            Item::Number(n) => stack.push(Item::Number(*n)),
             Item::Operator(o) => {
-                let b = mem.pop().unwrap().assert_number();
-                let a = mem.pop().unwrap().assert_number();
+                let b = stack.pop().unwrap().assert_number();
+                let a = stack.pop().unwrap().assert_number();
                 if b == Ratio::new(0, 1) && *o == Operator::Div {
                     return Err(anyhow::anyhow!("Division by zero"));
                 }
-                mem.push(Item::Number(o.apply(a, b)));
+                stack.push(Item::Number(o.apply(a, b)));
             }
         }
     }
-    Ok(mem.pop().unwrap().assert_number())
+    Ok(stack.pop().unwrap().assert_number())
 }
 
 // 式を逆ポーランドから通常の形式に変換する
-pub fn infix(stack: &[Item]) -> String {
-    let mut mem = Vec::new();
-    for item in stack {
+pub fn infix(expr: &[Item]) -> String {
+    let mut stack = Vec::new();
+    for item in expr {
         match item {
-            Item::Number(n) => mem.push(n.to_string()),
+            Item::Number(n) => stack.push(n.to_string()),
             Item::Operator(o) => {
-                let b = mem.pop().unwrap();
-                let a = mem.pop().unwrap();
-                mem.push(format!("({} {} {})", a, o, b));
+                let b = stack.pop().unwrap();
+                let a = stack.pop().unwrap();
+                stack.push(format!("({} {} {})", a, o, b));
             }
         }
     }
-    mem.pop().unwrap()
+    stack.pop().unwrap()
 }

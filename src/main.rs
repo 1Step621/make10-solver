@@ -21,10 +21,14 @@ fn main() {
         .collect_array::<4>()
         .unwrap();
 
-    solve(q);
+    let ans = solve(q);
+    for expr in ans {
+        println!("{}", expr::infix(&expr));
+    }
 }
 
-fn solve(q: [i32; 4]) {
+#[must_use]
+fn solve(q: [i32; 4]) -> Vec<Vec<expr::Item>> {
     // 逆ポーランド記法で有効となる長さ7の式のテンプレート
     const TEMPLATE: [[expr::ItemKind; 7]; 5] = [
         [
@@ -121,8 +125,5 @@ fn solve(q: [i32; 4]) {
             .unwrap_or(false)
     })
     .unique()
-    // 出力
-    .for_each(|expr| {
-        println!("{} = 10", expr::infix(&expr));
-    });
+    .collect()
 }
