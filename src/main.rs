@@ -94,30 +94,24 @@ fn solve(q: [i32; NUMBERS]) -> Vec<[expr::Item; LENGTH]> {
             .map(|&n| expr::Item::Number(Ratio::new(n, 1)))
             .permutations(NUMBERS),
         iproduct!(
-            Operator::VALUES.iter(),
-            Operator::VALUES.iter(),
-            Operator::VALUES.iter()
+            Operator::VALUES.into_iter().map(expr::Item::Operator),
+            Operator::VALUES.into_iter().map(expr::Item::Operator),
+            Operator::VALUES.into_iter().map(expr::Item::Operator),
         )
-        .map(|(o1, o2, o3)| [
-            expr::Item::Operator(*o1),
-            expr::Item::Operator(*o2),
-            expr::Item::Operator(*o3),
-        ]),
+        .map(|(a, b, c)| [a, b, c])
     )
     // 式を生成
     .map(|(template, num, op)| {
         template
             .iter()
-            .scan((0, 0), |(i, j), k| {
-                match k {
-                    expr::ItemKind::Number => {
-                        *i += 1;
-                        Some(num[*i - 1].clone())
-                    }
-                    expr::ItemKind::Operator => {
-                        *j += 1;
-                        Some(op[*j - 1].clone())
-                    }
+            .scan((0, 0), |(i, j), k| match k {
+                expr::ItemKind::Number => {
+                    *i += 1;
+                    Some(num[*i - 1].clone())
+                }
+                expr::ItemKind::Operator => {
+                    *j += 1;
+                    Some(op[*j - 1].clone())
                 }
             })
             .collect_array::<LENGTH>()
