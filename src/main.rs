@@ -22,7 +22,7 @@ fn main() {
     let q = buf
         .split_whitespace()
         .map(|s| s.parse().unwrap())
-        .collect_array::<4>()
+        .collect_array::<NUMBERS>()
         .unwrap();
 
     let ans = solve(q);
